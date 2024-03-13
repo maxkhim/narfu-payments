@@ -22,7 +22,7 @@
                 @keydown.prevent.arrow-down="next()"
                 @keydown.prevent.arrow-up="previous()"
                 @keydown.prevent.enter.prevent="select()"
-                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3 text-xs"
+                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3"
         >
             @if ($selected !== null)
                 {{ $items[$selected] }}

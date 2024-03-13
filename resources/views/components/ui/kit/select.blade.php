@@ -22,7 +22,7 @@
                 @keydown.prevent.arrow-down="next()"
                 @keydown.prevent.arrow-up="previous()"
                 @keydown.prevent.enter.prevent="select()"
-                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3"
+                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3 text-xs"
         >
             @if ($selected !== null)
                 {{ $items[$selected] }}
@@ -48,7 +48,7 @@
         </button>
         @if ($open)
 
-            <ul class="bg-white absolute mt-1 z-10 border rounded-lg w-full bg-indigo-200 overflow-y-scroll max-h-48">
+            <ul class="bg-white absolute mt-1 z-10 border rounded-lg w-full overflow-y-scroll max-h-48">
                 @foreach($items as $id => $item)
                     <li wire:click="select({{ $id }})"
 {{--                            @class([--}}

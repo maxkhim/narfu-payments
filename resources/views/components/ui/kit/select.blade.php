@@ -9,10 +9,16 @@
   },
   select() {
     this.$wire.call('select', this.highlighted)
+  },
+  close() {
+    if (this.$wire.open) {
+     this.$wire.open = false;
+    }
   }
 }"
      @click.outside="close()"
-     x-init="highlighted =  {{ $selected ?: 0 }}" class="mt-5">
+     @keydown.escape="close()"
+     x-init="highlighted =  {{ $selectedIndex ?: 0 }}" class="mt-5">
     <label class="text-gray-700">
         {{ $label }} <sup class="text-red-500">*</sup>
     </label>
@@ -22,11 +28,12 @@
                 @keydown.prevent.arrow-down="next()"
                 @keydown.prevent.arrow-up="previous()"
                 @keydown.prevent.enter.prevent="select()"
-                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3 overflow-hidden"
-                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                class="w-full flex justify-between bg-white border border-gray-300 form-input rounded-lg overflow-hidden"
         >
-            @if ($selected !== null)
-                {{ $items[$selected] }}
+            @if ($items[$selectedIndex]["title"]??null)
+                <span style="width: 97%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" class="text-left">
+                    {{ $items[$selectedIndex]["title"] }}
+                </span>
             @else
                 Выберите ...
             @endif
@@ -62,10 +69,9 @@
                         :class="{'bg-blue-400 text-white': index === highlighted}"
                         @mouseover="highlighted = index"
                     >
+                        {{ $item["title"] }}
 
-                        {{ $item }}
-
-                        @if ($selected === $id)
+                        @if (($items[$selectedIndex]["id"]??null) == $item["id"])
                             <div :class="index === highlighted ? 'text-white' : 'text-blue-500'">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />

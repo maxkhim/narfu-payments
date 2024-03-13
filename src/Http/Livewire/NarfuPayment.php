@@ -79,7 +79,6 @@ class NarfuPayment extends Component
 
     protected function getRules()
     {
-
         $category = PaymentCategory::query()
             ->find($this->currentCategoryId);
 
@@ -98,7 +97,6 @@ class NarfuPayment extends Component
 
     public function doPayment()
     {
-
         $this->validate($this->getRules());
 
         try {
@@ -161,16 +159,15 @@ class NarfuPayment extends Component
         $this->currentCategoryId = (int) Request::capture()->get("item");
 
         if (!$this->currentCategoryId) {
-            $defaultCategory = PaymentCategory::query()->first();
+            $defaultCategory = PaymentCategory::query()->orderBy("sort")->first();
 
             $this->currentCategoryId = $defaultCategory ? $defaultCategory->id : null;
         }
 
-
         $this->tabs = PaymentCategory::query()
             ->select(["id", "title"])
+            ->orderBy("sort")
             ->get()
-            ->pluck("title", "id")
             ->toArray();
 
         $this->paymentsRecipients = PaymentRecipient::query()
@@ -178,7 +175,6 @@ class NarfuPayment extends Component
             ->where(["category_id" => $this->currentCategoryId])
             ->orderBy("sort")
             ->get()
-            ->pluck("title", "id")
             ->toArray();
     }
 
@@ -191,6 +187,11 @@ class NarfuPayment extends Component
         return false;
     }
 
+    public function isMustBeDisplayed($field): bool
+    {
+        $rules = $this->getRules();
+        return isset($rules[$field]);
+    }
 
     public function render()
     {

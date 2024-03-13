@@ -16,9 +16,14 @@
         </div>
         @enderror
 
-
-    @foreach($tabs as $id => $tab)
-            <x-narfu-payments::ui.kit.tab label="{{ $tab }}" id="{{ $id }}" currentId="{{ $currentCategoryId }}" />
+        @foreach($tabs as $id => $tab)
+            <a href="?item={{$tab["id"]}}"
+               class="px-3 py-2 text-base leading-5 font-medium rounded-full text-gray-600 hover:text-gray-800 focus:outline-none
+       focus:text-gray-800 focus:bg-gray-200 @if ( $tab["id"] == $currentCategoryId ) bg-indigo-200 @else hover:bg-gray-100 @endif focus:bg-gray-300 font-semibold mr-4">
+                @if ($tab["title"])
+                    {{ $tab["title"] }}
+                @endif
+            </a>
         @endforeach
 
         <div class="mt-8">
@@ -43,7 +48,7 @@
             </div>
 
             <div class="grid grid-cols-3 gap-3">
-                @if ($this->isMustBeFilled('payer'))
+                @if ($this->isMustBeDisplayed('payer'))
                 <div>
                     <x-narfu-payments::ui.kit.input name="payer"
                                                     label="ФИО плательщика полностью"
@@ -60,7 +65,7 @@
                                                     hint=""
                                                     mustBeFilled="{{ $this->isMustBeFilled('reg_place') }}"></x-narfu-payments::ui.kit.input>
                 </div>
-                @if ($this->isMustBeFilled('dogovor'))
+                @if ($this->isMustBeDisplayed('dogovor'))
                 <div>
                     <x-narfu-payments::ui.kit.input
                             name="dogovor"
@@ -80,7 +85,7 @@
                             hint=""
                             mustBeFilled="{{ $this->isMustBeFilled('pay_for') }}"></x-narfu-payments::ui.kit.input>
                 </div>
-                @if ($this->isMustBeFilled('add_srv'))
+                @if ($this->isMustBeDisplayed('add_srv'))
                 <div>
                     <x-narfu-payments::ui.kit.input
                             name="add_srv"
@@ -90,12 +95,12 @@
                     ></x-narfu-payments::ui.kit.input>
                 </div>
                 @endif
-                @if ($this->isMustBeFilled('conference_name'))
+                @if ($this->isMustBeDisplayed('conference_name'))
                 <div>
                     <x-narfu-payments::ui.kit.input
                             name="conference_name"
-                            label="Наименование конференции (мероприятия)"
-                            placeholder="Наименование конференции (мероприятия)"
+                            label="Наименование конференции / мероприятия / услуги"
+                            placeholder="Наименование конференции / мероприятия / услуги"
                             mustBeFilled="{{ $this->isMustBeFilled('conference_name') }}"
                     ></x-narfu-payments::ui.kit.input>
                 </div>
@@ -119,9 +124,7 @@
             </button>
             </div>
         </div>
-
-
-
+    </div>
 </div>
 
 

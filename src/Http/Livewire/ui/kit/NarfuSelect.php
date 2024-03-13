@@ -12,6 +12,8 @@ class NarfuSelect extends Component
     public $items;
 
     public $selected = null;
+    public ?int $selectedIndex = null;
+
 
     public $label;
 
@@ -27,9 +29,11 @@ class NarfuSelect extends Component
         if (!$this->open) {
             return;
         }
-        $this->selected = $this->selected !== $index ? $index : null;
+
+        $this->selectedIndex = $this->selectedIndex !== $index ? $index : null;
+        $this->selected = $this->selectedIndex !== $index ? $index : null;
         $this->open = false;
-        $this->emit('itemSelect', (string) $this->selected);
+        $this->emit('itemSelect', (string) ($this->items[$this->selectedIndex]["id"]??null));
     }
 
     public function render()

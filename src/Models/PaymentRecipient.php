@@ -4,6 +4,7 @@ namespace Narfu\Payments\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class PaymentRecipient
@@ -21,6 +22,8 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PaymentRecipient extends Model
 {
+    use SoftDeletes;
+
     protected $table = 'narfu_payment_recipients';
 
     protected $casts = [

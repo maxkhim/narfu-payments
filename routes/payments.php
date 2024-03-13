@@ -12,11 +12,9 @@ Route::middleware(['web', 'auth', 'verified'/*, AdminMiddleware::class*/])->grou
 
 });
 
-Route::middleware(['web'])->group(function () {
+Route::middleware(['web', 'guest'])->group(function () {
     Route::group(['prefix' => '/narfu/payments-guest'], function () {
         Route::get('/', [\Narfu\Payments\Http\Controllers\PaymentsController::class, 'indexGuest'])
             ->name('narfu.payments-guest');
     });
-
-
 });

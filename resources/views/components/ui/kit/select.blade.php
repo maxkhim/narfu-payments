@@ -22,7 +22,8 @@
                 @keydown.prevent.arrow-down="next()"
                 @keydown.prevent.arrow-up="previous()"
                 @keydown.prevent.enter.prevent="select()"
-                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3"
+                class="w-full flex items-center justify-between py-2.5 bg-white border border-gray-300 form-input rounded-lg px-3 overflow-hidden"
+                style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
         >
             @if ($selected !== null)
                 {{ $items[$selected] }}

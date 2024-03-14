@@ -28,6 +28,7 @@ class NarfuPayment extends Component
     public string $add_srv = '';
     public string $conference_name = '';
     public string $amount = '';
+    public string $email = '';
     public string $recipientId = '';
 
 
@@ -46,15 +47,17 @@ class NarfuPayment extends Component
         'conference_name' => 'Наименование конференции (мероприятия)',
         'recipientId' => 'За что осуществляется платёж',
         'amount' => 'Сумма платежа',
+        'email' => 'Электронная почта',
     ];
 
     protected array $rules = [
         'payer' => 'required|min:6',
         'reg_place' => 'required|min:10',
         'recipientId' => 'required',
-        'dogovor' => 'required',
+        'dogovor' => '',
         'amount' => 'required|numeric',
         'pay_for' => 'required',
+        'email' => 'required',
     ];
 
     public array $tabs = [];
@@ -124,7 +127,7 @@ class NarfuPayment extends Component
                     "orderid" => date("ymdHi")."-".substr(md5((string)microtime(true)), 0, 6),
                     "clientid" => $this->payer, //"Альберт Петрович Михельсон",
                     "client_phone" => $this->dogovor,
-                    //"client_email" => $this->pay_for,
+                    "client_email" => $this->email,
                     "service_name" => $valuesImploded,
                     "pay_amount" => $this->amount,
                     "token" => $token

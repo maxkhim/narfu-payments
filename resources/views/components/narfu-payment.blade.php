@@ -109,6 +109,17 @@
                     ></x-narfu-payments::ui.kit.input>
                 </div>
                 @endif
+                @if ($this->isMustBeDisplayed('email'))
+                <div>
+                    <x-narfu-payments::ui.kit.input
+                            name="email"
+                            label="Электронная почта"
+                            placeholder="Например: i.ivanov@narfu.ru"
+                            mustBeFilled="true"
+                            hint="На этот адрес будет направлена информация об оплате"
+                    ></x-narfu-payments::ui.kit.input>
+                </div>
+                @endif
             </div>
 
             <div class="grid grid-cols-3 gap-3">

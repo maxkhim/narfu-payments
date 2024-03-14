@@ -18,8 +18,12 @@
 
         @foreach($tabs as $id => $tab)
             <a href="?item={{$tab["id"]}}"
-               class="px-3 py-2 text-base leading-5 font-medium rounded-full text-gray-600 hover:text-gray-800 focus:outline-none
-       focus:text-gray-800 focus:bg-gray-200 @if ( $tab["id"] == $currentCategoryId ) bg-indigo-200 @else hover:bg-gray-100 @endif focus:bg-gray-300 font-semibold mr-4">
+               class="md:inline-block md:mr-2 inline-block px-3 py-1 leading-5 text-xs rounded-full
+               text-gray-600 hover:text-gray-800 focus:outline-none mt-2 border-indigo-400 border
+       focus:text-gray-800 focus:bg-gray-200 focus:bg-gray-300 font-semibold text-center
+@if ( $tab["id"] == $currentCategoryId ) bg-indigo-600 text-white
+@else text-indigo-700 hover:bg-gray-100 @endif
+                       ">
                 @if ($tab["title"])
                     {{ $tab["title"] }}
                 @endif
@@ -27,7 +31,7 @@
         @endforeach
 
         <div class="mt-8">
-            <div class="grid grid-cols-2 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
                 <livewire:narfu-select
                         :items="$paymentsRecipients"
@@ -47,7 +51,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-3">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                 @if ($this->isMustBeDisplayed('payer'))
                 <div>
                     <x-narfu-payments::ui.kit.input name="payer"
@@ -99,8 +103,8 @@
                 <div>
                     <x-narfu-payments::ui.kit.input
                             name="conference_name"
-                            label="Наименование конференции / мероприятия / услуги"
-                            placeholder="Наименование конференции / мероприятия / услуги"
+                            label="Наименование"
+                            placeholder="Конференции, мероприятия, услуги, книжной продукции"
                             mustBeFilled="{{ $this->isMustBeFilled('conference_name') }}"
                     ></x-narfu-payments::ui.kit.input>
                 </div>
@@ -113,18 +117,23 @@
 
             </div>
 
-
-
-
-
-
             <div class="text-right">
             <button class="border-gray-200 bg-indigo-500 text-white border rounded p-2 w-48 mt-5" value="ok" name="ok" wire:click="doPayment">
                 Оплатить
             </button>
             </div>
+
+            <div class="mt-4 text-center w-full bg-white p-4 mb-7">
+                <img
+                        src="/narfu/payments/logo/pay-logo.svg"
+                        class="text-center h-10 inline"
+                />
+            </div>
         </div>
+
     </div>
+
+
 </div>
 
 

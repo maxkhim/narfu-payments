@@ -10,7 +10,6 @@ use Narfu\Payments\Http\Livewire\NarfuPayment;
 use Narfu\Payments\Http\Livewire\ui\kit\NarfuAutocompete;
 use Narfu\Payments\Http\Livewire\ui\kit\NarfuSelect;
 
-
 class PaymentsServiceProvider extends ServiceProvider
 {
     public static function getMigrationPath(): string
@@ -38,6 +37,10 @@ class PaymentsServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+        $this->publishes([
+            __DIR__.'/../../resources/logo' => public_path('narfu/payments/logo'),
+        ], 'narfu-payments');
+
         $this->loadRoutesFrom(__DIR__ . '/../../routes/payments.php');
         $this->loadViewsFrom(__DIR__ . '/../../resources/views', 'narfu-payments');
         $this->registerLivewireComponents();
@@ -45,7 +48,6 @@ class PaymentsServiceProvider extends ServiceProvider
 
         if (App::runningInConsole()) {
             $this->app->booted(function () {
-
             });
         }
     }
@@ -66,6 +68,4 @@ class PaymentsServiceProvider extends ServiceProvider
             CheckPayments::class,
         ]);
     }
-    
-
 }

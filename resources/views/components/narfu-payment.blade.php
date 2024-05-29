@@ -134,12 +134,11 @@
             </button>
             </div>
 
-
+            <div class="mt-8 font-bold text-xl">
+                Способы оплаты
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div>
-                    <div class="mt-8 font-bold text-xl">
-                        Способы оплаты
-                    </div>
                     <div class="mt-8 font-bold text-sm">
                         Наличный расчёт
                     </div>

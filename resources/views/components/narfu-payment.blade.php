@@ -28,6 +28,12 @@
             </div>
         @endif
 
+        @if($messageCode == \Narfu\Payments\Http\Livewire\NarfuPayment::MESSAGE_CODE_WAIT)
+            <div class="w-full p-6 mb-7 bg-gray-100 overflow-hidden shadow rounded-lg text-gray-600 text-center">
+                {{ $messageResult }}
+            </div>
+        @endif
+
 
         @foreach($tabs as $id => $tab)
             <a href="?item={{$tab["id"]}}"

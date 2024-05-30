@@ -22,6 +22,7 @@ class NarfuPayment extends Component
 
     public const MESSAGE_CODE_SUCCESS = 200;
     public const MESSAGE_CODE_FAIL = 500;
+    public const MESSAGE_CODE_WAIT = 300;
 
     public string $name = 'Ok';
     public string $payer = '';
@@ -226,6 +227,9 @@ class NarfuPayment extends Component
                         if ($paymentInfo["status"] == "failed") {
                             $this->messageCode = self::MESSAGE_CODE_FAIL;
                             $this->messageResult = "Платёж не был выполнен";
+                        } else {
+                            $this->messageCode = self::MESSAGE_CODE_WAIT;
+                            $this->messageResult = "Состояние платежа в обработке";
                         }
                     }
                 } /**/

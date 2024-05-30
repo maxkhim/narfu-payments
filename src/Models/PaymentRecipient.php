@@ -15,6 +15,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string|null $code
  * @property float|null $price
  * @property int|null $sort
+ * @property double|null $tax
+ * @property string|null $type
  * @property array|null $rules
  *
  * @package Narfu\Payments\Models
@@ -35,4 +37,39 @@ class PaymentRecipient extends Model
     {
         return $this->hasOne(PaymentCategory::class, "id", "category_id");
     }
+
+    public function getPaykeeperTaxTitle(): string
+    {
+        $result = "none";
+        switch ($this->tax) {
+            case 10:
+                $result = "vat10";
+                break;
+            case 20:
+                $result = "vat20";
+                break;
+            default:
+                $result = "none";
+                break;
+        }
+
+        return $result;
+    }
+
+    public function getPaykeeperTypeTitle(): string
+    {
+        $result = "service";
+        switch ($this->type) {
+            case "goods":
+                $result = "goods";
+                break;
+            default:
+                $result = "service";
+                break;
+        }
+
+        return $result;
+    }
+
+
 }

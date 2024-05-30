@@ -20,6 +20,9 @@ class NarfuPayment extends Component
     use AuthorizesRequests;
     use WithPagination;
 
+    public const MESSAGE_CODE_SUCCESS = 200;
+    public const MESSAGE_CODE_FAIL = 500;
+
     public string $name = 'Ok';
     public string $payer = '';
     public string $reg_place = '';
@@ -34,6 +37,9 @@ class NarfuPayment extends Component
 
     public string $code = '';
     public string $title = '';
+
+    public string $messageResult = "";
+    public int $messageCode = 0;
 
     private ?PaymentRecipient $currentPaymentRecipient = null;
     public ?int $currentCategoryId = null;
@@ -70,7 +76,7 @@ class NarfuPayment extends Component
     public function itemSelect(string $item)
     {
         $this->recipientId = $item;
-        /** @var $recipient PaymentRecipient*/
+        /** @var ?PaymentRecipient $recipient */
         $recipient = PaymentRecipient::query()->find((int)$this->recipientId);
         if ($recipient) {
             $this->currentPaymentRecipient = $recipient;
@@ -89,9 +95,9 @@ class NarfuPayment extends Component
             ->find((int)$this->recipientId);
 
         $rules = $this->rules;
-        if ($recipient->rules??null) {
+        if ($recipient->rules ?? null) {
             $rules = $recipient->rules;
-        } elseif ($category->rules??null) {
+        } elseif ($category->rules ?? null) {
             $rules = $category->rules;
         }
         return $rules;
@@ -104,7 +110,7 @@ class NarfuPayment extends Component
 
         try {
             $separator = "|";
-            if (strpos($this->amount, ",") !==false) {
+            if (strpos($this->amount, ",") !== false) {
                 $this->amount = str_replace(",", ".", $this->amount);
             }
 
@@ -115,50 +121,120 @@ class NarfuPayment extends Component
             }
 
             $valuesImploded =
-                $this->title.$separator.
-                ($this->code??"").$separator.
+                $this->title . $separator .
+                ($this->code ?? "") . $separator .
                 implode($separator, $values);
 
 
             $paykeeperClient = new PaykeeperClient();
+            $cart = [];
+            $checkService = [];
             $res = $paykeeperClient->info()->getToken();
             if ($token = ($res["body"]["token"] ?? "")) {
+                /** @var ?PaymentRecipient $recipient */
+                $recipient = PaymentRecipient::query()
+                    ->find((int)$this->recipientId);
+
+                if ($recipient) {
+                    $cart[] = [
+                        'name' => $recipient->title,
+                        'price' => $this->amount,
+                        'quantity' => 1,
+                        'sum' => $this->amount,
+                        'tax' => $recipient->getPaykeeperTaxTitle(),
+                        'item_type' => $recipient->getPaykeeperTypeTitle(),
+                    ];
+
+                    $checkService = [
+                        "cart" => json_encode($cart),
+                        "user_result_callback" => route("narfu.payments-guest"),
+                        "lang" => "ru",
+                        "receipt_properties" => json_encode([]),
+                        "service_name" => $valuesImploded
+                    ];
+                }
+
+                $orderId =
+                    date("ymdHi") . "-" . substr(md5((string)microtime(true)), 0, 6);
                 $payment_data = [
-                    "orderid" => date("ymdHi")."-".substr(md5((string)microtime(true)), 0, 6),
+                    "orderid" => $orderId,
                     "clientid" => $this->payer, //"Альберт Петрович Михельсон",
                     "client_phone" => $this->dogovor,
                     "client_email" => $this->email,
-                    "service_name" => $valuesImploded,
+                    "service_name" => json_encode($checkService),
                     "pay_amount" => $this->amount,
-                    "token" => $token
+                    "token" => $token,
+                    //"cart" => json_encode($cart)
                 ];
                 $res = $paykeeperClient->invoice()->prepare($payment_data);
-                $invoiceId = ($res["body"]["invoice_id"]??null);
+                $invoiceId = ($res["body"]["invoice_id"] ?? null);
                 if ($invoiceId) {
                     $payment = new Payment([
                         "external_id" => $invoiceId,
                         "amount" => $this->amount,
                         "metadata" => $values,
                         "currency" => "RUB",
+                        "order_id" => $orderId,
                         "category_id" => $this->currentCategoryId,
                         "recipient_id" => $this->recipientId,
                         "is_test" => config("narfu-payments.is_test"),
                         "gate" => "paykeeper",
                     ]);
-                    $payment->save();
-                    $invoiceUrl = ($res["body"]["invoice_url"]);
-                    $this->redirect($invoiceUrl);
+
+                    if ($payment->save()) {
+                        $invoiceUrl = ($res["body"]["invoice_url"]);
+                        $this->redirect($invoiceUrl);
+                        session()->put("currentOrderId", $orderId);
+                    } else {
+                        throw new \Exception("Что-то пошло не так Paykeeper");
+                    }
                 } else {
                     throw new \Exception("Не удалось получить ответ от Paykeeper");
                 }
             }
         } catch (\Exception $exception) {
-            $this->addError("sentError", $exception->getMessage());
+            $this->addError(
+                "sentError",
+                $exception->getMessage() .
+                " (L: " . $exception->getLine() . " F: " . $exception->getTraceAsString() . ")"
+            );
         }
     }
 
     public function mount(): void
     {
+
+        $paymentId = Request::capture()->get("payment_id");
+        if ($paymentId) {
+            $paykeeperClient = new PaykeeperClient();
+            $resultRequest = ($paykeeperClient->payment()->info($paymentId));
+            $paymentInfo = $resultRequest["body"][0] ?? [];
+
+            if (isset($paymentInfo["id"])) {
+                if (session()->get("currentOrderId") == $paymentInfo["orderid"]) {
+                    $payment = Payment::query()
+                        ->where(["order_id" => $paymentInfo["orderid"]])
+                        ->first();
+
+                    $payment->is_paid = ($paymentInfo["status"] == "success");
+                    $payment->payment_id = $paymentInfo["id"];
+                    $payment->save();
+                    if ($payment->is_paid) {
+                        $this->messageCode = self::MESSAGE_CODE_SUCCESS;
+                        $this->messageResult = "Платёж прошёл успешно!";
+                    } else {
+                        if ($paymentInfo["status"] == "failed") {
+                            $this->messageCode = self::MESSAGE_CODE_FAIL;
+                            $this->messageResult = "Платёж не был выполнен";
+                        }
+                    }
+                } /**/
+            } else {
+                //$this->redirect(route("narfu.payments-guest"));
+            }
+        }
+
+
         $this->currentCategoryId = (int) Request::capture()->get("item");
 
         if (!$this->currentCategoryId) {

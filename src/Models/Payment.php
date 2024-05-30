@@ -22,6 +22,7 @@ class Payment extends Model
         "metadata",
         "category_id",
         "recipient_id",
+        "order_id",
         "gate",
         "currency",
         "is_test",

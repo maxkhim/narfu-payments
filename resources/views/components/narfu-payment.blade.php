@@ -16,6 +16,19 @@
         </div>
         @enderror
 
+        @if($messageCode == \Narfu\Payments\Http\Livewire\NarfuPayment::MESSAGE_CODE_SUCCESS)
+        <div class="w-full p-6 mb-7 bg-green-100 overflow-hidden shadow rounded-lg text-green-500 text-center">
+            {{ $messageResult }}
+        </div>
+        @endif
+
+        @if($messageCode == \Narfu\Payments\Http\Livewire\NarfuPayment::MESSAGE_CODE_FAIL)
+            <div class="w-full p-6 mb-7 bg-red-100 overflow-hidden shadow rounded-lg text-red-500 text-center">
+                {{ $messageResult }}
+            </div>
+        @endif
+
+
         @foreach($tabs as $id => $tab)
             <a href="?item={{$tab["id"]}}"
                class="md:inline-block md:mr-2 inline-block px-3 py-1 leading-5 text-xs rounded-full

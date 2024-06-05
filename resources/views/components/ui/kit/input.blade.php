@@ -28,9 +28,10 @@
     <input class="form-input rounded-md shadow-sm mt-1 block w-full @if($markedWarning) bg-red-100 border-red-500 @endif"
            name="{{ $name }}"
            id="{{ $name }}"
+           autocomplete="off"
            type="text"
            placeholder="{{ $placeholder }}"
-           wire:model="{{ $name }}"/>
+           wire:model.defer="{{ $name }}"/>
     @error($name)
         <div class="text-red-600 text-size-10-standart">{{ $message }}</div>
     @enderror

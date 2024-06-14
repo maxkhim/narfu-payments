@@ -117,8 +117,13 @@ class NarfuPayment extends Component
 
             $fields = array_keys($this->validationAttributes);
             $values = [];
+            $this->title = str_replace("\"", "", $this->title);
             foreach ($fields as $field) {
-                $values[$field] = str_replace($separator, " ", $this->{$field});
+                $values[$field] = str_replace(
+                    "\"",
+                    "",
+                    str_replace($separator, " ", $this->{$field})
+                );
             }
 
             $valuesImploded =

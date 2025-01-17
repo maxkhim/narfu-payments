@@ -148,9 +148,15 @@
             </div>
 
             <div class="text-right">
-            <button class="border-gray-200 bg-indigo-500 text-white border rounded p-2 w-48 mt-5" value="ok" name="ok" wire:click="doPayment">
-                Оплатить
-            </button>
+                <button class="border-gray-200 bg-indigo-500 text-white border rounded p-2 w-48 mt-5" value="ok" name="ok" wire:click="doPayment">
+                    Оплатить
+                </button>
+            </div>
+
+            <div class="text-left">
+                <a href="https://narfu.ru/university/structure/faq/11320/395982/" target="_blank" class="border-gray-200 bg-indigo-500 text-white border rounded px-5 p-2 w-auto mt-5">
+                    Справка для получения налогового вычета
+                </a>
             </div>
 
             <div class="mt-8 font-bold text-xl">

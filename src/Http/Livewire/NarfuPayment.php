@@ -36,6 +36,9 @@ class NarfuPayment extends Component
     public string $recipientId = '';
 
 
+    public string $defaultRecipientId = '';
+
+
     public string $code = '';
     public string $title = '';
 
@@ -44,6 +47,8 @@ class NarfuPayment extends Component
 
     private ?PaymentRecipient $currentPaymentRecipient = null;
     public ?int $currentCategoryId = null;
+
+
 
     protected array $validationAttributes = [
         'payer' => 'ФИО плательщика полностью',
@@ -210,6 +215,7 @@ class NarfuPayment extends Component
     public function mount(): void
     {
 
+        $recipientId = (int)Request::capture()->get("recipient_id");
         $paymentId = Request::capture()->get("payment_id");
         if ($paymentId) {
             $paykeeperClient = new PaykeeperClient();
@@ -246,10 +252,26 @@ class NarfuPayment extends Component
 
         $this->currentCategoryId = (int) Request::capture()->get("item");
 
+
+
         if (!$this->currentCategoryId) {
             $defaultCategory = PaymentCategory::query()->orderBy("sort")->first();
 
             $this->currentCategoryId = $defaultCategory ? $defaultCategory->id : null;
+        }
+
+        if ($recipientId) {
+            try {
+                $this->defaultRecipientId = (string)$recipientId;
+                $this->itemSelect((string)$recipientId);
+                if ($this->currentPaymentRecipient) {
+                    $this->currentCategoryId = $this->currentPaymentRecipient->category_id;
+                }
+            } catch (\Exception $exception) {
+
+            }
+
+            //dd($this->currentPaymentRecipient);
         }
 
         $this->tabs = PaymentCategory::query()

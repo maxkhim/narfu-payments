@@ -54,6 +54,7 @@
                 <div>
                 <livewire:narfu-select
                         :items="$paymentsRecipients"
+                        :defaultId="$defaultRecipientId"
                         label="За что осуществляется платёж"
                 />
                 @error("recipientId")

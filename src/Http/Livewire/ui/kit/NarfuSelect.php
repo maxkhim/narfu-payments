@@ -13,12 +13,24 @@ class NarfuSelect extends Component
 
     public $selected = null;
     public ?int $selectedIndex = null;
-
+    public ?string $defaultId = null;
 
     public $label;
 
     public $open = false;
 
+    public function mount($items, $defaultId)
+    {
+        try {
+            foreach ($items as $index => $item) {
+                if (($item["id"] == $defaultId) && $defaultId) {
+                    $this->open = true;
+                    $this->select($index);
+                }
+            }
+        } catch (\Exception $exception) {
+        }
+    }
     public function toggle()
     {
         $this->open = !$this->open;
@@ -33,7 +45,7 @@ class NarfuSelect extends Component
         $this->selectedIndex = $this->selectedIndex !== $index ? $index : null;
         $this->selected = $this->selectedIndex !== $index ? $index : null;
         $this->open = false;
-        $this->emit('itemSelect', (string) ($this->items[$this->selectedIndex]["id"]??null));
+        $this->emit('itemSelect', (string) ($this->items[$this->selectedIndex]["id"] ?? null));
     }
 
     public function render()

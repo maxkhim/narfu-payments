@@ -14,6 +14,7 @@ class NarfuSelect extends Component
     public $selected = null;
     public ?int $selectedIndex = null;
     public ?string $defaultId = null;
+    public string $search = "";
 
     public $label;
 

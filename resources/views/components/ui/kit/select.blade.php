@@ -56,7 +56,12 @@
         </button>
         @if ($open)
 
-            <ul class="bg-white absolute mt-1 z-10 border rounded-lg w-full overflow-y-scroll max-h-48">
+            <ul class="bg-white absolute mt-1 z-10 border rounded-lg w-full overflow-y-scroll max-h-56">
+                @if(count($items) > 5)
+                    <div class="p-1.5">
+                        <x-narfu-payments::ui.kit.input name="search" live="true" placeholder="Найти получателя платежа"></x-narfu-payments::ui.kit.input>
+                    </div>
+                @endif
                 @foreach($items as $id => $item)
                     <li wire:click="select({{ $id }})"
 {{--                            @class([--}}
@@ -65,7 +70,8 @@
 {{--                                'hover:bg-indigo-200 hover:text-white',--}}
 {{--                            ])--}}
                             x-data="{ index: {{ $id }} }"
-                        class="px-3 py-2 cursor-pointer flex items-center justify-between text-xs"
+                        class="px-3 py-2 cursor-pointer flex items-center justify-between text-xs
+{{ (trim($this->search ?? "") && (mb_stripos($item["title"], $this->search) === false)) ? "hidden" : "" }}"
                         :class="{'bg-blue-400 text-white': index === highlighted}"
                         @mouseover="highlighted = index"
                     >

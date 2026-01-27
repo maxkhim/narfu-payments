@@ -48,6 +48,9 @@ class PaymentRecipient extends Model
             case 20:
                 $result = "vat20";
                 break;
+            case 22:
+                $result = "vat22";
+                break;
             default:
                 $result = "none";
                 break;

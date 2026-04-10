@@ -1,4 +1,4 @@
-@props(['checked' => false, 'label' => "", "name" => "", $live = false])
+@props(['checked' => false, 'label' => "", "name" => "", "live" => false])
 <div class="flex">
     <label class="flex items-center mt-0 md:mt-3">
         <input name="{{ $name }}" id="{{ $name }}"

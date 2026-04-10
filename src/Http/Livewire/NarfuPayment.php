@@ -42,6 +42,8 @@ class NarfuPayment extends Component
     public string $code = '';
     public string $title = '';
 
+    public string $pd_confirm = '';
+
     public string $messageResult = "";
     public int $messageCode = 0;
 
@@ -106,6 +108,11 @@ class NarfuPayment extends Component
         } elseif ($category->rules ?? null) {
             $rules = $category->rules;
         }
+
+        if (!isset($rules["pd_confirm"])) {
+            $rules["pd_confirm"] = "required";
+        }
+
         return $rules;
     }
 

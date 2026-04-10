@@ -109,9 +109,9 @@ class NarfuPayment extends Component
             $rules = $category->rules;
         }
 
-//        if (!isset($rules["pd_confirm"])) {
-//            $rules["pd_confirm"] = "required";
-//        }
+        if (!isset($rules["pd_confirm"])) {
+            $rules["pd_confirm"] = "required";
+        }
 
         return $rules;
     }

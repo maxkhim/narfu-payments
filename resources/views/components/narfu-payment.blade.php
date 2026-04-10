@@ -144,15 +144,15 @@
 
             </div>
 
-            <div class="grid grid-cols-1 gap-1">
-                <x-narfu-payments::ui.kit.checkbox
-                        name="pd_confirm"
-                        id="pd_confirm"
-                        label="Даю согласие на обработку своих персональных данных"
-                        mustBeFilled="true"
-                        hint="Даю согласие на обработку своих персональных данных"
-                ></x-narfu-payments::ui.kit.checkbox>
-            </div>
+{{--            <div class="grid grid-cols-1 gap-1">--}}
+{{--                <x-narfu-payments::ui.kit.checkbox--}}
+{{--                        name="pd_confirm"--}}
+{{--                        id="pd_confirm"--}}
+{{--                        label="Даю согласие на обработку своих персональных данных"--}}
+{{--                        mustBeFilled="true"--}}
+{{--                        hint="Даю согласие на обработку своих персональных данных"--}}
+{{--                ></x-narfu-payments::ui.kit.checkbox>--}}
+{{--            </div>--}}
 
             <div class="text-right">
                 <button class="border-gray-200 bg-indigo-500 text-white border rounded p-2 w-48 mt-5" value="ok" name="ok" wire:click="doPayment">

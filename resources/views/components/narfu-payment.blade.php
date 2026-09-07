@@ -157,7 +157,7 @@
                     <a href="https://cloud.agtu.ru/index.php/s/FRrWSSFmps9a8JW" class="text-indigo-600 block leading-tight hover:text-indigo-700 text-[10px] md:text-xs transition ease-in-out duration-300" target="_blank">Согласие на обработку персональных данных</a>
                 </div>
                 <div class="mt-3">
-                    <a href="https://narfu.ru/sveden/document/" class="text-indigo-600 block leading-tight hover:text-indigo-700 text-[10px] md:text-xs transition ease-in-out duration-300" target="_blank">
+                    <a href="https://narfu.ru/sveden/document/#OPD" class="text-indigo-600 block leading-tight hover:text-indigo-700 text-[10px] md:text-xs transition ease-in-out duration-300" target="_blank">
                                     Права и обязанности в области защиты персональных данных на основании локальных документов, размещенные на сайте университета в разделе
                         https://narfu.ru/sveden/document/</a>
 

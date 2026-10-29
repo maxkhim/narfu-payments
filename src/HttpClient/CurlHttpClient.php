@@ -107,6 +107,9 @@ class CurlHttpClient
 
         $response = curl_exec($curl);
 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); // Иногда требуется отключить и это
+
         $curl_error_code = curl_errno($curl);
         $curl_error = curl_error($curl);
 

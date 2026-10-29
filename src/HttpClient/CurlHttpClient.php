@@ -33,6 +33,8 @@ class CurlHttpClient
             CURLOPT_HEADER         => true,
             CURLOPT_CONNECTTIMEOUT => $connectionTimeout,
             CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
             CURLOPT_HTTPHEADER     => [
                 'Authorization: Basic ' . $base64AuthData,
             ]
@@ -106,9 +108,6 @@ class CurlHttpClient
         curl_setopt_array($curl, $this->initialConnectionOptions + $opts);
 
         $response = curl_exec($curl);
-
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false); // Иногда требуется отключить и это
 
         $curl_error_code = curl_errno($curl);
         $curl_error = curl_error($curl);

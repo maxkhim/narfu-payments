@@ -214,7 +214,7 @@ class NarfuPayment extends Component
             $this->addError(
                 "sentError",
                 $exception->getMessage() .
-                " (L: " . $exception->getLine() . " F: " . $exception->getTraceAsString() . ")"
+                " (L: " . $exception->getLine() . " F: " . $exception->getFile() . ")"
             );
         }
     }

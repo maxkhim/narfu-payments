@@ -213,9 +213,13 @@ class NarfuPayment extends Component
         } catch (\Exception $exception) {
             $this->addError(
                 "sentError",
-                $exception->getMessage() .
-                " (L: " . $exception->getLine() . " F: " . $exception->getFile() . ")"
+                $exception->getMessage()
             );
+            activity("paykeeper")
+                ->log(
+                    " (L: " .
+                    $exception->getLine() . " F: " . $exception->getFile() . ")" . $exception->getTraceAsString()
+                );
         }
     }
 
